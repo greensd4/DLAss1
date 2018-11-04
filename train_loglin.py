@@ -3,34 +3,27 @@ import random
 import utils as ut
 import numpy as np
 
-from matplotlib import pyplot as plt
-
-
-
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
-
-LR = 0.3
-EPOCH = 100
+STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
+         'ID': '308243948_308576933'}
+LR = 0.15
+EPOCH = 200
 
 
 def feats_to_vec(features):
-    # YOUR CODE HERE.
     # Should return a numpy vector of features.
-    features = ut.text_to_bigrams(features)
+    feats = ut.text_to_bigrams(features)
     feat_vec = np.array(np.zeros(len(ut.F2I)))
-    matches_counter = 0
-    for bigram in features:
+    matches = 0
+    for bigram in feats:
         if bigram in ut.F2I:
             feat_vec[ut.F2I[bigram]] += 1
-            matches_counter += 1
-    return np.divide(feat_vec, matches_counter)
+            matches += 1
+    return np.divide(feat_vec, matches)
 
 
 def accuracy_on_dataset(dataset, params):
     good = bad = 0.0
     for label, features in dataset:
-        # YOUR CODE HERE
         # Compute the accuracy (a scalar) of the current parameters
         # on the dataset.
         # accuracy is (correct_predictions / all_predictions)
@@ -85,7 +78,7 @@ def test(parameters):
 
     params - the trained params
     """
-    fd = open("test.pred.loglin", 'w')
+    # fd = open("test.pred.ll", 'w')
     counter = 0
     test_ans = ''
     test_data = ut.read_data('test')
@@ -95,9 +88,9 @@ def test(parameters):
             if i == pred:
                 test_ans = l
         counter += 1
-        fd.write(test_ans+"\n")
+        # fd.write(test_ans+"\n")
         #print 'line: ', counter, 'prediction: ', test_ans
-    fd.close()
+    # fd.close()
 
 if __name__ == '__main__':
     # write code to load the train and dev sets, set up whatever you need,

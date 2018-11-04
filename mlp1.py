@@ -1,8 +1,8 @@
 import numpy as np
 import loglinear as ll
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
+         'ID': '308243948_308576933'}
 
 def classifier_output(x, params):
     p = list(params)
@@ -100,7 +100,6 @@ if __name__ == '__main__':
         return loss,grads[3]
 
     for _ in xrange(10):
-        print _, '!!!!!!!!!!!!!!!!!!'
         W = np.random.randn(W.shape[0], W.shape[1])
         b = np.random.randn(b.shape[0])
         U = np.random.randn(W.shape[0], W.shape[1])

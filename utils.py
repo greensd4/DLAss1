@@ -2,6 +2,10 @@
 # Use it if you want, or ignore it.
 import random
 import xor_data as xd
+
+STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
+         'ID': '308243948_308576933'}
+
 def read_data(fname):
     data = []
     for line in file(fname):

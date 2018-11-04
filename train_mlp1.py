@@ -1,18 +1,19 @@
 import utils as ut
 import numpy as np
-import mlpn
+import mlp1
 import random
 
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 
+STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
+         'ID': '308243948_308576933'}
 
-LR = 0.05
-EPOCH = 100
-HIDDEN_SIZE = 20
+LR = 0.15
+EPOCH = 500
+HIDDEN_SIZE = 10
 
 
 def feats_to_vec(features):
-
     features = ut.text_to_bigrams(features)
     feat_vec = np.array(np.zeros(len(ut.F2I)))
     matches_counter = 0
@@ -22,20 +23,21 @@ def feats_to_vec(features):
             matches_counter += 1
     return np.divide(feat_vec, matches_counter)
 
+
 def accuracy_on_dataset(dataset, params):
     good = bad = 0.0
     for label, features in dataset:
-        # YOUR CODE HERE
         # Compute the accuracy (a scalar) of the current parameters
         # on the dataset.
         # accuracy is (correct_predictions / all_predictions)
-        pred = mlpn.predict(feats_to_vec(features), params)
+        pred = mlp1.predict(feats_to_vec(features), params)
         if pred == ut.L2I[label]:
             good += 1
         else:
             bad += 1
         pass
     return good / (good + bad)
+
 
 def train_classifier(train_data, dev_data, num_iterations, learning_rate, params):
     """
@@ -55,7 +57,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         for label, features in train_data:
             x = feats_to_vec(features)  # convert features to a vector.
             y = ut.L2I[label]  # convert the label to number if needed.
-            loss, grads = mlpn.loss_and_gradients(x, y, params)
+            loss, grads = mlp1.loss_and_gradients(x, y, params)
             cum_loss += loss
             # update the parameters according to the gradients
             # and the learning rate.
@@ -70,14 +72,36 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         dev_accuracy = accuracy_on_dataset(dev_data, params)
         acc.append((train_accuracy,dev_accuracy))
         print I, train_loss, train_accuracy, dev_accuracy
-    fig = plt.plot(acc)
-    fig1 = plt.plot(costs)
+    #fig = plt.plot(acc)
+    #fig1 = plt.plot(costs)
     return params
+
+
+def test(parameters):
+    """
+    test classifier with test data - no labels
+
+    params - the trained params
+    """
+    fd = open("test.pred", 'w')
+    counter = 0
+    test_ans = ''
+    test_data = ut.read_data('test')
+    for label, feature in test_data:
+        pred = mlp1.predict(feats_to_vec(feature), parameters)
+        for l,i in ut.L2I.items():
+            if i == pred:
+                test_ans = l
+        counter += 1
+        fd.write(test_ans+"\n")
+        #print 'line: ', counter, 'prediction: ', test_ans
+    fd.close()
+
 
 if __name__ == '__main__':
     train_data = ut.read_data('train')
     dev_data = ut.read_data('dev')
-
-    params = mlpn.create_classifier([len(ut.F2I),HIDDEN_SIZE, len(ut.L2I)])
+    params = mlp1.create_classifier(len(ut.F2I),HIDDEN_SIZE, len(ut.L2I))
     trained_params = train_classifier(train_data,dev_data,EPOCH,LR,params)
     print trained_params
+    test(trained_params)

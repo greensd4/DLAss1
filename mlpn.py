@@ -1,12 +1,11 @@
 import numpy as np
 import utils as ut
 import loglinear as ll
-from mlp1 import loss_and_gradients as lng
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+
+STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
+         'ID': '308243948_308576933'}
 
 def classifier_output(x, params):
-    # YOUR CODE HERE.
     index = 0
     p = ut.params_to_couples(params)
     vec = x

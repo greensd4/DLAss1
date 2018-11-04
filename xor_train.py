@@ -4,10 +4,10 @@ import random
 import utils as ut
 import numpy as np
 
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
-STUDENT = {'name': 'YOUR NAME',
-           'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
+         'ID': '308243948_308576933'}
 
 LR = 0.3
 EPOCH = 100

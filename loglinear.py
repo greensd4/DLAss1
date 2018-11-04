@@ -1,7 +1,8 @@
 import numpy as np
 
-STUDENT={'name': 'YOUR NAME',
-         'ID': 'YOUR ID NUMBER'}
+STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
+         'ID': '308243948_308576933'}
+
 
 def softmax(x):
     """
@@ -14,10 +15,10 @@ def softmax(x):
     # don't use any loops.
     # With a vectorized implementation, the code should be no more than 2 lines.
     #
-    e_x = np.exp(x - np.max(x))
-    x = e_x / e_x.sum(axis=0)
+    exp = np.exp(x - np.max(x))
+    x = exp / exp.sum(axis=0)
     return x
-    
+
 
 def classifier_output(x, params):
     """
@@ -30,6 +31,7 @@ def classifier_output(x, params):
     probs = softmax(log_linear_vec)
     return probs
 
+
 def predict(x, params):
     """
     Returnss the prediction (highest scoring class id) of a
@@ -40,6 +42,7 @@ def predict(x, params):
     b: vector
     """
     return np.argmax(classifier_output(x, params))
+
 
 def loss_and_gradients(x, y, params):
     """
@@ -53,15 +56,10 @@ def loss_and_gradients(x, y, params):
     gW: matrix, gradients of W
     gb: vector, gradients of b
     """
-    W, b = params
-    # YOU CODE HERE
     p = classifier_output(x,params)
-    #### compute gradient!!!
-
     gb = p.copy()
     gb[y] -= 1
     gW = np.outer(x, gb)
-
     loss = -np.log(classifier_output(x, params)[y])
     return loss, [gW, gb]
 
@@ -74,6 +72,7 @@ def create_classifier(in_dim, out_dim):
     W = np.zeros((in_dim, out_dim))
     b = np.zeros(out_dim)
     return [W,b]
+
 
 if __name__ == '__main__':
     # Sanity checks for softmax. If these fail, your softmax is definitely wrong.
