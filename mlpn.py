@@ -5,6 +5,7 @@ import loglinear as ll
 STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
          'ID': '308243948_308576933'}
 
+
 def classifier_output(x, params):
     index = 0
     p = ut.params_to_couples(params)
@@ -21,25 +22,27 @@ def classifier_output(x, params):
     probs = ll.softmax(vec)
     return probs
 
+
 def predict(x, params):
     # return the prediction with the highest score.
     return np.argmax(classifier_output(x, params))
 
-def fp(x, params):
+
+def calculate_vectors(x, params):
     # make the layers params
-    h_s = []
-    z_s = []
+    tanh = []
+    dots = []
     h = x
-    h_s.append(h)
+    tanh.append(h)
     for i in range(0, len(params), 2):
         z = np.dot(h,params[i]) + params[i + 1]
-        z_s.append(z)
+        dots.append(z)
         h = np.tanh(z)
-        h_s.append(np.copy(h))
+        tanh.append(np.copy(h))
     # getting Wn and bn out of lists
-    h_s.pop()
-    z_s.pop()
-    return h_s, z_s
+    tanh.pop()
+    dots.pop()
+    return tanh, dots
 
 
 def loss_and_gradients(x, y, params):
@@ -60,7 +63,7 @@ def loss_and_gradients(x, y, params):
     you should not have gW2 and gb2.)
     """
     gradients = []
-    h_s, z_s = fp(x, params)
+    tanhs, dots = calculate_vectors(x, params)
     probs = classifier_output(x, params)  # probabilities vec
     y_one_hot = np.zeros(len(probs))  # create one-hot vector
     y_one_hot[y] = 1
@@ -70,7 +73,7 @@ def loss_and_gradients(x, y, params):
 
     d_l_z = -(y_one_hot-probs)
 
-    h = h_s.pop() #h n-1
+    h = tanhs.pop() #h n-1
 
     gW = np.outer(h,d_l_z)
     gb = np.copy(d_l_z)
@@ -80,12 +83,12 @@ def loss_and_gradients(x, y, params):
 
     for i,(W, b) in enumerate(list(p)):
 
-        if(len(z_s) != 0):
+        if(len(dots) != 0):
 
-            z = z_s.pop()
+            z = dots.pop()
             w_n_plus = W
-            if(len(h_s) != 0):
-                d_z_W = h_s.pop()
+            if(len(tanhs) != 0):
+                d_z_W = tanhs.pop()
                 d_h_z = 1 - np.square(np.tanh(z))
                 d_z_h = w_n_plus
                 d_l_z = np.dot(d_l_z, np.transpose(d_z_h)) * d_h_z
@@ -96,6 +99,7 @@ def loss_and_gradients(x, y, params):
                 gradients.append(gW)
                 gradients.append(gb)
 
+
     gradients_in_asc_order = []
     for (W,b) in list(reversed(list(ut.params_to_couples(gradients)))):
         gradients_in_asc_order.append(W)
@@ -103,6 +107,7 @@ def loss_and_gradients(x, y, params):
 
     loss = -np.log(probs[y])
     return loss,gradients_in_asc_order
+
 
 def create_classifier(dims):
     """

@@ -10,7 +10,7 @@ STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
 
 LR = 0.15
 EPOCH = 500
-HIDDEN_SIZE = 10
+HIDDEN_SIZE = 20
 
 
 def feats_to_vec(features):

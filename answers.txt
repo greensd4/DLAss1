@@ -1,5 +1,11 @@
-1. MLP allowing us by using non-linear function to divide the information that can not be divided by linear functions. with using MLP we need an algorithm to calculate the error at the output and to the spread it to the network layers and then getting better accuracies.
+STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
+         'ID': '308243948_308576933'}
 
-2. the accuracy of unigram model is lower than the bi-gram model (unigram accuracy was around 40% and bigram was around 85%). 
+1. In MLP we use backpropagation algorithms, which is kind of learning technique, for training.
+The difference between MLP and linear preceptron is that in MLP we use non-linear function and MLP uses many layers for learning.
+Hence MLP can distinguish data that can not be seperated linearly.
+In this assignment our since we try to distinguis between many languages MLP will provide better accuaracies than the linear model.
 
-3.we have tried to verify that the MLP can learn the XOR problem. we found out that we need at least 90 epcohes.
+2. The accuracies of the models (linear and MLP) on unigram are lower than the bigram (unigram accuracy was around 55% and bigram was around 85%).
+
+3. We have tried to verify that the MLP can learn the XOR problem. We found out that we need at least 80 epcohes to get to stable accuarcy.
