@@ -65,39 +65,38 @@ def create_classifier(in_dim, hid_dim, out_dim):
 
     return [W,b,U,b_tag]
 
-if __name__ == '__main__':
-
+def sanity_check():
     from grad_check import gradient_check
 
-    W,b,U,b_tag = create_classifier(3,3,4)
+    W, b, U, b_tag = create_classifier(3, 3, 4)
 
     def _loss_and_W_grad(W):
         global b
         global U
         global b_tag
-        loss,grads = loss_and_gradients([1,2,3],0,[W,b,U,b_tag])
-        return loss,grads[0]
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        return loss, grads[0]
 
     def _loss_and_b_grad(b):
         global W
         global U
         global b_tag
-        loss,grads = loss_and_gradients([1,2,3],0,[W,b,U,b_tag])
-        return loss,grads[1]
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        return loss, grads[1]
 
     def _loss_and_U_grad(U):
         global W
         global b
         global b_tag
-        loss,grads = loss_and_gradients([1,2,3],0,[W,b,U,b_tag])
-        return loss,grads[2]
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        return loss, grads[2]
 
     def _loss_and_b_tag_grad(b_tag):
         global W
         global b
         global U
-        loss,grads = loss_and_gradients([1,2,3],0,[W,b,U,b_tag])
-        return loss,grads[3]
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        return loss, grads[3]
 
     for _ in xrange(10):
         W = np.random.randn(W.shape[0], W.shape[1])
@@ -112,3 +111,6 @@ if __name__ == '__main__':
         gradient_check(_loss_and_U_grad, U)
         print 'b_tag:'
         gradient_check(_loss_and_b_tag_grad, b_tag)
+
+if __name__ == '__main__':
+    sanity_check()

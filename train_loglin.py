@@ -78,7 +78,7 @@ def test(parameters):
 
     params - the trained params
     """
-    # fd = open("test.pred.ll", 'w')
+    fd = open("test.pred.ll", 'w')
     counter = 0
     test_ans = ''
     test_data = ut.read_data('test')
@@ -88,9 +88,8 @@ def test(parameters):
             if i == pred:
                 test_ans = l
         counter += 1
-        # fd.write(test_ans+"\n")
-        #print 'line: ', counter, 'prediction: ', test_ans
-    # fd.close()
+        fd.write(test_ans+"\n")
+    fd.close()
 
 if __name__ == '__main__':
     # write code to load the train and dev sets, set up whatever you need,
@@ -102,7 +101,7 @@ if __name__ == '__main__':
     params = ll.create_classifier(len(ut.F2I), len(ut.L2I))
     trained_params = train_classifier(train_data, dev_data, EPOCH, LR, params)
     print 'the final params are:\nW =\n', trained_params[0], '\nb =\n', trained_params[1]
-    test(trained_params)
+    #test(trained_params)
 
 
 

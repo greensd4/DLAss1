@@ -5,10 +5,21 @@ import loglinear as ll
 STUDENT={'name': 'Daniel Greenspan_Eilon Bashari',
          'ID': '308243948_308576933'}
 
+def params_to_couples(params):
+    p = list(params)
+    coupled_list = []
+    for index in range(0, len(p), 2):
+        coupled_list.append((p[index],p[index+1]))
+    return coupled_list
+
+def dim_to_couples(dims):
+    return [(n1,n2) for n1,n2 in zip(dims,dims[1:])]
+
+
 
 def classifier_output(x, params):
     index = 0
-    p = ut.params_to_couples(params)
+    p = params_to_couples(params)
     vec = x
     for (param1,param2) in p:
         # last params just (Wx + b)
@@ -69,7 +80,7 @@ def loss_and_gradients(x, y, params):
     y_one_hot[y] = 1
 
     # gradients values
-    p = list(reversed(ut.params_to_couples(params)))
+    p = list(reversed(params_to_couples(params)))
 
     d_l_z = -(y_one_hot-probs)
 
@@ -101,7 +112,7 @@ def loss_and_gradients(x, y, params):
 
 
     gradients_in_asc_order = []
-    for (W,b) in list(reversed(list(ut.params_to_couples(gradients)))):
+    for (W,b) in list(reversed(list(params_to_couples(gradients)))):
         gradients_in_asc_order.append(W)
         gradients_in_asc_order.append(b)
 
@@ -132,7 +143,7 @@ def create_classifier(dims):
     params = []
     root_six = np.sqrt(6)
 
-    for in_dim,out_dim in ut.dim_to_couples(dims):
+    for in_dim,out_dim in dim_to_couples(dims):
         eps = root_six / (np.sqrt(in_dim + out_dim))
         params.append(np.random.uniform(-eps, eps, [in_dim, out_dim]))
         eps = root_six / (np.sqrt(out_dim))
@@ -140,12 +151,10 @@ def create_classifier(dims):
     return params
 
 
-if __name__ == '__main__':
-
+def sanity_check():
     from grad_check import gradient_check
 
-    W, b, U, b_tag,V, b_t = create_classifier([3, 3, 4, 4])
-
+    W, b, U, b_tag, V, b_t = create_classifier([3, 3, 4, 4])
 
     def _loss_and_W_grad(W):
         global b
@@ -153,9 +162,8 @@ if __name__ == '__main__':
         global b_tag
         global V
         global b_t
-        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag,V,b_t])
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag, V, b_t])
         return loss, grads[0]
-
 
     def _loss_and_b_grad(b):
         global W
@@ -166,7 +174,6 @@ if __name__ == '__main__':
         loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag, V, b_t])
         return loss, grads[1]
 
-
     def _loss_and_U_grad(U):
         global W
         global b
@@ -176,14 +183,13 @@ if __name__ == '__main__':
         loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag, V, b_t])
         return loss, grads[2]
 
-
     def _loss_and_b_tag_grad(b_tag):
         global W
         global b
         global U
         global V
         global b_t
-        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag,V,b_t])
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag, V, b_t])
         return loss, grads[3]
 
     def _loss_and_V_grad(V):
@@ -192,7 +198,7 @@ if __name__ == '__main__':
         global U
         global b_tag
         global b_t
-        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag,V,b_t])
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag, V, b_t])
         return loss, grads[4]
 
     def _loss_and_b_t_grad(b_t):
@@ -201,31 +207,8 @@ if __name__ == '__main__':
         global U
         global b_tag
         global V
-        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag,V,b_t])
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag, V, b_t])
         return loss, grads[5]
-
-    def _loss_and_UU_grad(UU):
-        global b
-        global U
-        global b_tag
-        global V
-        global b_t
-        global W
-        global bb
-        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag,V,b_t,UU,bb])
-        return loss, grads[6]
-
-    def _loss_and_bb_grad(bb):
-        global b
-        global U
-        global b_tag
-        global V
-        global b_t
-        global W
-        global UU
-        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag,V,b_t,UU,bb])
-        return loss, grads[7]
-
 
     for _ in xrange(2):
         print _, '!!!!!!!!!!!!!!!!!!'
@@ -247,4 +230,8 @@ if __name__ == '__main__':
         gradient_check(_loss_and_V_grad, V)
         print 'bb:'
         gradient_check(_loss_and_b_t_grad, b_t)
+
+if __name__ == '__main__':
+    sanity_check()
+
 

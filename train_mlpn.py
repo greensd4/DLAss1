@@ -61,11 +61,8 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             cum_loss += loss
             # update the parameters according to the gradients
             # and the learning rate.
-            params[0] -= learning_rate * grads[0]
-            params[1] -= learning_rate * grads[1]
-            params[2] -= learning_rate * grads[2]
-            params[3] -= learning_rate * grads[3]
-
+            for i in range(0,len(params)-1):
+                params[i] -= learning_rate * grads[i]
         train_loss = cum_loss / len(train_data)
         costs.append(train_loss)
         train_accuracy = accuracy_on_dataset(train_data, params)
